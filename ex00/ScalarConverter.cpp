@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:15 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/17 15:42:25 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/17 15:54:39 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,6 @@ void	ScalarConverter::_initType(void)
 {
 	if (_isChar())
 		_type = CHAR;
-	if (!_isNumber())
-		throw std::invalid_argument("Not a number");
 	else if (_isInt())
 		_type = INT;
 	else if (_isFloat())
@@ -138,12 +136,46 @@ bool	ScalarConverter::_isInt(void)
 {
 	if (_dots)
 		return false;
+
+	std::string::const_iterator it = _str.begin();
+
+	if (*it == '+' || *it == '-')
+		it++;
+	while (it != _str.end())
+	{
+		if (!std::isdigit(*it))
+			return false;
+		++it;
+	}
 	return true;
 }
 
 bool	ScalarConverter::_isFloat(void)
 {
+	if (!_dots)
+		return false;
 
+	std::string::const_iterator it = _str.begin();
+
+	if (_str.length() == 2)
+	{
+		if (*it == '.' && *(it + 1) == 'f')
+			throw std::invalid_argument("Invalid Float: no digits");
+	}
+	if (*it == '+' || *it == '-')
+		it++;
+	while (it != _str.end())
+	{
+		if (!std::isdigit(*it) && *it != '.')
+		{
+			if (*it != 'f')
+				throw std::invalid_argument("Invalid Float: bad char");
+			if (it + 1 != _str.end())
+				throw std::invalid_argument("Invalid Float: char after 'f'");
+		}
+		++it;
+	}
+	return _str.find('f') != std::string::npos;
 }
 
 bool	ScalarConverter::_isDouble(void)

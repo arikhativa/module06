@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 10:45:46 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/17 14:56:50 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/17 15:52:21 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 int main( void )
 {
-	ScalarConverter s();
+	// ScalarConverter s();
+	float f = .f;
+
+	std::cout << f << std::endl;
 	return 0;
 }
