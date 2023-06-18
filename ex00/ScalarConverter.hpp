@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:13 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 15:36:09 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 16:01:38 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,61 +34,61 @@ typedef enum	e_type
 
 class ScalarConverter
 {
-
 	public:
-		explicit	ScalarConverter(const char *arg);
-		~ScalarConverter();
+		static void	convert(const char *arg);
 
 	private:
+		~ScalarConverter();
 		ScalarConverter();
 		ScalarConverter( ScalarConverter const & src );
 		ScalarConverter &		operator=( ScalarConverter const & rhs );
 
-		std::string			_str;
-		const int			_dots;
-		t_type				_type;
+		static std::string			_str;
+		static int					_dots;
+		static t_type				_type;
 
-		char				_char;
-		int					_int;
-		float				_float;
-		double				_double;
+		static char				_char;
+		static int					_int;
+		static float				_float;
+		static double				_double;
 
-		bool				_int_overflow;
-		bool				_float_overflow;
-		bool				_double_overflow;
-		bool				_no_decimal;
+		static bool				_int_overflow;
+		static bool				_float_overflow;
+		static bool				_double_overflow;
+		static bool				_no_decimal;
 
-		void	_validateInput(void) const;
-		void	_initType(void);
-		void	_setLimits(void);
+		static void	_validateInput(void);
+		static void	_initType(void);
+		static void	_setLimits(void);
+		static int	_countDots(std::string str);
 
 	// convert()
-		void	_convert(void);
-		void	_convertChar(void);
-		void	_convertInt(void);
-		void	_convertFloat(void);
-		void	_convertDouble(void);
-		void	_convertPseudoLiterals(void);
+		static void	_convertValue(void);
+		static void	_convertChar(void);
+		static void	_convertInt(void);
+		static void	_convertFloat(void);
+		static void	_convertDouble(void);
+		static void	_convertPseudoLiterals(void);
 
 	// is()
-		bool	_isInfi(void);
-		bool	_isChar(void);
-		bool	_isInt(void);
-		bool	_isFloat(void);
-		bool	_isDouble(void);
-		bool	_isWholeNumber(void) const;
+		static bool	_isInfi(void);
+		static bool	_isChar(void);
+		static bool	_isInt(void);
+		static bool	_isFloat(void);
+		static bool	_isDouble(void);
+		static bool	_isWholeNumber(void);
 
 	// util
-		float	_getFloatPseudoLiterals(void) const;
-		double	_getDoublePseudoLiterals(void) const;
+		static float	_getFloatPseudoLiterals(void);
+		static double	_getDoublePseudoLiterals(void);
 
 	// print()
-		void	_printValues(void) const;
-		void	_printChar(void) const;
-		void	_printInt(void) const;
-		void	_printFloat(void) const;
-		void	_printDouble(void) const;
-		void	_printPseudoLiterals(void) const;
+		static void	_printValues(void);
+		static void	_printChar(void);
+		static void	_printInt(void);
+		static void	_printFloat(void);
+		static void	_printDouble(void);
+		static void	_printPseudoLiterals(void);
 
 };
 

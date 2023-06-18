@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 10:45:46 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 13:02:44 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 16:01:32 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@ int main(int ac, char **av)
 		std::cout << "usage: ./convert [string]" << std::endl;
 		return 0;
 	}
-	ScalarConverter s(av[1]);
+	ScalarConverter::convert(av[1]);
 	return 0;
 }

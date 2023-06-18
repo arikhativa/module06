@@ -6,76 +6,40 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:15 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 15:46:51 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 16:04:58 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
 
-/*
-** ----------------------------- STATIC FUNCTION -------------------------------
-*/
 
-static int	countDots(std::string str)
-{
-	int dots = 0;
-
-	for (std::string::const_iterator it = str.begin(); it != str.end(); it++)
-	{
-		if (*it == '.')
-			dots++;
-	}
-	return dots;
-}
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-ScalarConverter::ScalarConverter(const char *arg)
-	:	_str(arg),
-		_dots(countDots(_str)),
-		_type(ERROR),
-		_int_overflow(false),
-		_float_overflow(false),
-		_double_overflow(false),
-		_no_decimal(false)
-{
-	try
-	{
-		_validateInput();
-		_initType();
-		_setLimits();
-		_convert();
-		_printValues();
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-}
+std::string	ScalarConverter::_str = "";
+int			ScalarConverter::_dots = 0;
+t_type		ScalarConverter::_type = ERROR;
+
+char		ScalarConverter::_char = 0;
+int			ScalarConverter::_int = 0;
+float		ScalarConverter::_float = 0;
+double		ScalarConverter::_double = 0;
+
+bool		ScalarConverter::_int_overflow = false;
+bool		ScalarConverter::_float_overflow = false;
+bool		ScalarConverter::_double_overflow = false;
+bool		ScalarConverter::_no_decimal = false;
 
 ScalarConverter::ScalarConverter()
-	:	_str(""),
-		_dots(0),
-		_type(ERROR),
-		_int_overflow(false),
-		_float_overflow(false),
-		_double_overflow(false)
 {
 }
 
 ScalarConverter::ScalarConverter( const ScalarConverter & src )
-	:	_str(""),
-		_dots(0),
-		_type(ERROR),
-		_int_overflow(false),
-		_float_overflow(false),
-		_double_overflow(false)
 {
 	(void)src;
 }
-
 
 /*
 ** -------------------------------- DESTRUCTOR --------------------------------
@@ -90,7 +54,7 @@ ScalarConverter::~ScalarConverter()
 ** --------------------------------- OVERLOAD ---------------------------------
 */
 
-ScalarConverter &				ScalarConverter::operator=( ScalarConverter const & rhs )
+ScalarConverter &				ScalarConverter::operator=( const ScalarConverter & rhs )
 {
 	(void)rhs;
 	return *this;
@@ -100,7 +64,42 @@ ScalarConverter &				ScalarConverter::operator=( ScalarConverter const & rhs )
 ** --------------------------------- METHODS ----------------------------------
 */
 
-void	ScalarConverter::_validateInput(void) const
+void ScalarConverter::convert(const char *arg)
+{
+	_str = arg;
+	_dots = _countDots(_str);
+	_type = ERROR;
+	_int_overflow = false;
+	_float_overflow = false;
+	_double_overflow = false;
+	_no_decimal = false;
+	try
+	{
+		_validateInput();
+		_initType();
+		_setLimits();
+		_convertValue();
+		_printValues();
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+}
+
+int	ScalarConverter::_countDots(std::string str)
+{
+	int dots = 0;
+
+	for (std::string::const_iterator it = str.begin(); it != str.end(); it++)
+	{
+		if (*it == '.')
+			dots++;
+	}
+	return dots;
+}
+
+void	ScalarConverter::_validateInput(void)
 {
 	if (_str.empty())
 		throw std::invalid_argument("Empty argument");
@@ -146,7 +145,7 @@ void		ScalarConverter::_setLimits(void)
 ** ------------------------------ PRINT METHODS --------------------------------
 */
 
-void	ScalarConverter::_printValues(void) const
+void	ScalarConverter::_printValues(void)
 {
 	_printChar();
 	_printInt();
@@ -154,7 +153,7 @@ void	ScalarConverter::_printValues(void) const
 	_printDouble();
 }
 
-void	ScalarConverter::_printChar(void) const
+void	ScalarConverter::_printChar(void)
 {
 	if (_type == PSEUDO_LITERALS)
 	{
@@ -167,7 +166,7 @@ void	ScalarConverter::_printChar(void) const
 		std::cout << "char: '" << _char << "'" << std::endl;
 }
 
-void	ScalarConverter::_printInt(void) const
+void	ScalarConverter::_printInt(void)
 {
 	if (_type == PSEUDO_LITERALS)
 	{
@@ -182,7 +181,7 @@ void	ScalarConverter::_printInt(void) const
 	std::cout << "int: " << _int << std::endl;
 }
 
-void	ScalarConverter::_printFloat(void) const
+void	ScalarConverter::_printFloat(void)
 {
 	if (_float_overflow && _type != PSEUDO_LITERALS)
 	{
@@ -197,7 +196,7 @@ void	ScalarConverter::_printFloat(void) const
 		std::cout << "float: " << _float << "f" <<  std::endl;
 }
 
-void	ScalarConverter::_printDouble(void) const
+void	ScalarConverter::_printDouble(void)
 {
 	if (_no_decimal)
 	{
@@ -211,7 +210,7 @@ void	ScalarConverter::_printDouble(void) const
 ** ------------------------------ CONVERT METHODS ------------------------------
 */
 
-void	ScalarConverter::_convert(void)
+void	ScalarConverter::_convertValue(void)
 {
 	switch (_type)
 	{
@@ -257,7 +256,7 @@ void	ScalarConverter::_convertInt(void)
 	_no_decimal = true;
 }
 
-bool	ScalarConverter::_isWholeNumber(void) const
+bool	ScalarConverter::_isWholeNumber(void)
 {
 	std::size_t i = _str.find('.');
 
@@ -405,7 +404,7 @@ bool	ScalarConverter::_isInfi(void)
 ** --------------------------------- ACCESSOR ---------------------------------
 */
 
-float	ScalarConverter::_getFloatPseudoLiterals(void) const
+float	ScalarConverter::_getFloatPseudoLiterals(void)
 {
 	if (_str == "+inff" || _str == "+inf")
 		return std::numeric_limits<float>::infinity();
@@ -414,7 +413,7 @@ float	ScalarConverter::_getFloatPseudoLiterals(void) const
 	return std::numeric_limits<float>::quiet_NaN();
 }
 
-double	ScalarConverter::_getDoublePseudoLiterals(void) const
+double	ScalarConverter::_getDoublePseudoLiterals(void)
 {
 	if (_str == "+inff" || _str == "+inf")
 		return std::numeric_limits<double>::infinity();
