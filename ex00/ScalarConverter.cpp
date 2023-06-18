@@ -6,13 +6,19 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:15 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 09:53:39 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 10:30:13 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
 
-int	_countDots(std::string str)
+
+
+/*
+** ----------------------------- STATIC FUNCTION -------------------------------
+*/
+
+static int	countDots(std::string str)
 {
 	int dots = 0;
 
@@ -29,13 +35,13 @@ int	_countDots(std::string str)
 */
 
 ScalarConverter::ScalarConverter(const char *arg)
-	: _str(arg), _dots(_countDots(_str)), _type(ERROR)
+	: _str(arg), _dots(countDots(_str)), _type(ERROR)
 {
 	try
 	{
 		_validateInput();
 		_initType();
-		std::cout << "type: " << _type << std::endl;
+		_printValues();
 	}
 	catch (const std::exception& e)
 	{
@@ -78,10 +84,6 @@ ScalarConverter &				ScalarConverter::operator=( ScalarConverter const & rhs )
 ** --------------------------------- METHODS ----------------------------------
 */
 
-/*
-** ----------------------------- PRIVATE METHODS -------------------------------
-*/
-
 void	ScalarConverter::_validateInput(void)
 {
 	if (_str.empty())
@@ -89,7 +91,6 @@ void	ScalarConverter::_validateInput(void)
 
 	if (1 < _dots)
 		throw std::invalid_argument("Too many dots");
-		
 }
 
 void	ScalarConverter::_initType(void)
@@ -109,6 +110,82 @@ void	ScalarConverter::_initType(void)
 }
 
 /*
+** ----------------------------- PRINT METHODS -------------------------------
+*/
+
+
+
+/*
+** ------------------------------ CONVERT METHODS ------------------------------
+*/
+
+void	ScalarConverter::_convert(void)
+{
+	switch (_type)
+	{
+		case CHAR:
+			_convertChar();
+			break;
+		case INT:
+			_convertInt();
+			break;
+		case FLOAT:
+			_convertFloat();
+			break;
+		case DOUBLE:
+			_convertDouble();
+			break;
+		case PSEUDO_LITERALS:
+			_convertPseudoLiterals();
+			break;
+		default:
+			break;
+	}
+}
+
+void	ScalarConverter::_convertChar(void)
+{
+	_char = _str[0];
+	_int = static_cast<int>(_char);
+	_float = static_cast<float>(_char);
+	_double = static_cast<double>(_char);
+}
+
+void	ScalarConverter::_convertInt(void)
+{
+	_int = std::atoi(_str.c_str());
+	_char = static_cast<char>(_int);
+	_float = static_cast<float>(_int);
+	_double = static_cast<double>(_int);
+}
+
+void	ScalarConverter::_convertFloat(void)
+{
+	double	d = std::atof(_str.c_str());
+
+	_float = static_cast<float>(d);
+	_char = static_cast<char>(_float);
+	_int = static_cast<int>(_float);
+	_double = static_cast<double>(_float);
+}
+
+void	ScalarConverter::_convertDouble(void)
+{
+	_double = std::strtod(_str.c_str(), NULL);
+	_char = static_cast<char>(_double);
+	_int = static_cast<int>(_double);
+	_float = static_cast<float>(_double);
+}
+
+void	ScalarConverter::_convertPseudoLiterals(void)
+{
+	_char = 0;
+	_int = 0;
+	_float = _getFloatPseudoLiterals();
+	_double = _getDoublePseudoLiterals();
+}
+
+/*
 ** -------------------------------- IS METHODS ---------------------------------
 */
 
@@ -121,21 +198,6 @@ bool	ScalarConverter::_isChar(void)
 		return true;
 	}
 	return false;
-}
-
-bool	ScalarConverter::_isNumber(void)
-{
-	std::string::const_iterator it = _str.begin();
-
-	if (*it == '+' || *it == '-')
-		it++;
-	while (it != _str.end())
-	{
-		if (!std::isdigit(*it) && *it != '.')
-			return false;
-		++it;
-	}
-	return true;
 }
 
 bool	ScalarConverter::_isInt(void)
@@ -217,5 +279,22 @@ bool	ScalarConverter::_isInfi(void)
 ** --------------------------------- ACCESSOR ---------------------------------
 */
 
+float	ScalarConverter::_getFloatPseudoLiterals(void) const
+{
+	if (_str == "+inff" || _str == "+inf")
+		return std::numeric_limits<float>::max();
+	else if (_str == "-inff" || _str == "-inf")
+		return -std::numeric_limits<float>::min();
+	return std::numeric_limits<float>::quiet_NaN();
+}
+
+double	ScalarConverter::_getDoublePseudoLiterals(void) const
+{
+	if (_str == "+inff" || _str == "+inf")
+		return std::numeric_limits<double>::max();
+	else if (_str == "-inff" || _str == "-inf")
+		return -std::numeric_limits<double>::min();
+	return std::numeric_limits<double>::quiet_NaN();
+}
 
 /* ************************************************************************** */
