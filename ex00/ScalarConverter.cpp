@@ -6,13 +6,11 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:15 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 10:30:13 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 10:49:48 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
-
-
 
 /*
 ** ----------------------------- STATIC FUNCTION -------------------------------
@@ -35,12 +33,15 @@ static int	countDots(std::string str)
 */
 
 ScalarConverter::ScalarConverter(const char *arg)
-	: _str(arg), _dots(countDots(_str)), _type(ERROR)
+	:	_str(arg),
+		_dots(countDots(_str)),
+		_type(ERROR)
 {
 	try
 	{
 		_validateInput();
 		_initType();
+		_convert();
 		_printValues();
 	}
 	catch (const std::exception& e)
@@ -110,10 +111,51 @@ void	ScalarConverter::_initType(void)
 }
 
 /*
-** ----------------------------- PRINT METHODS -------------------------------
+** ------------------------------ PRINT METHODS --------------------------------
 */
 
+void	ScalarConverter::_printValues(void) const
+{
+	std::cout << "input: '" << _str << "'" << std::endl;
+	_printChar();
+	_printInt();
+	_printFloat();
+	_printDouble();
+}
 
+void	ScalarConverter::_printChar(void) const
+{
+	if (_type == PSEUDO_LITERALS)
+	{
+		std::cout << "\tchar: impossible" << std::endl;
+		return ;
+	}
+	if (!std::isprint(_char))
+		std::cout << "\tchar: unprintable" << std::endl;
+	else
+		std::cout << "\tchar: " << _char << std::endl;
+}
+
+void	ScalarConverter::_printInt(void) const
+{
+	if (_type == PSEUDO_LITERALS)
+	{
+		std::cout << "\tint: impossible" << std::endl;
+		return ;
+	}
+	std::cout << "\tint: " << _int << std::endl;
+}
+
+void	ScalarConverter::_printFloat(void) const
+{
+	std::cout << "\tfloat: " << _float << std::endl;
+
+}
+
+void	ScalarConverter::_printDouble(void) const
+{
+	std::cout << "\tdouble: " << _double << std::endl;
+}
 
 /*
 ** ------------------------------ CONVERT METHODS ------------------------------
@@ -181,8 +223,8 @@ void	ScalarConverter::_convertPseudoLiterals(void)
 {
 	_char = 0;
 	_int = 0;
-	_float = _getFloatPseudoLiterals();
-	_double = _getDoublePseudoLiterals();
+	_double = std::strtod(_str.c_str(), NULL);
+	_float = static_cast<float>(_double);
 }
 
 /*
@@ -282,9 +324,9 @@ bool	ScalarConverter::_isInfi(void)
 float	ScalarConverter::_getFloatPseudoLiterals(void) const
 {
 	if (_str == "+inff" || _str == "+inf")
-		return std::numeric_limits<float>::max();
+		return std::numeric_limits<float>::max() + 1;
 	else if (_str == "-inff" || _str == "-inf")
-		return -std::numeric_limits<float>::min();
+		return std::numeric_limits<float>::min() - 1;
 	return std::numeric_limits<float>::quiet_NaN();
 }
 
