@@ -6,11 +6,11 @@
 #    By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/18 13:56:52 by yrabby            #+#    #+#              #
-#    Updated: 2023/06/17 14:57:06 by yrabby           ###   ########.fr        #
+#    Updated: 2023/06/18 09:42:17 by yrabby           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME 					= test
+NAME 					= convert
 
 # class
 CLASS_DIR				= .

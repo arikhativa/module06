@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:13 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/17 15:41:25 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 09:43:58 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ typedef enum	e_type
 	CHAR,
 	INT,
 	FLOAT,
-	DOUBLE
+	DOUBLE,
+	PSEUDO_LITERALS
 }				t_type;
 
 class ScalarConverter
@@ -45,6 +46,7 @@ class ScalarConverter
 		void		_initType(void);
 
 	// is()
+		bool	_isInfi(void);
 		bool	_isChar(void);
 		bool	_isNumber(void);
 		bool	_isInt(void);

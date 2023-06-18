@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:15 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/17 15:54:39 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 09:53:39 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ ScalarConverter::ScalarConverter(const char *arg)
 	{
 		_validateInput();
 		_initType();
+		std::cout << "type: " << _type << std::endl;
 	}
 	catch (const std::exception& e)
 	{
@@ -43,10 +44,12 @@ ScalarConverter::ScalarConverter(const char *arg)
 }
 
 ScalarConverter::ScalarConverter()
+	: _str(""), _dots(0), _type(ERROR)
 {
 }
 
 ScalarConverter::ScalarConverter( const ScalarConverter & src )
+	: _str(""), _dots(0), _type(ERROR)
 {
 	(void)src;
 }
@@ -91,7 +94,9 @@ void	ScalarConverter::_validateInput(void)
 
 void	ScalarConverter::_initType(void)
 {
-	if (_isChar())
+	if (_isInfi())
+		_type = PSEUDO_LITERALS;
+	else if (_isChar())
 		_type = CHAR;
 	else if (_isInt())
 		_type = INT;
@@ -99,8 +104,9 @@ void	ScalarConverter::_initType(void)
 		_type = FLOAT;
 	else if (_isDouble())
 		_type = DOUBLE;
+	if (_type == ERROR)
+		throw std::invalid_argument("Invalid argument");
 }
-
 
 /*
 ** -------------------------------- IS METHODS ---------------------------------
@@ -180,9 +186,32 @@ bool	ScalarConverter::_isFloat(void)
 
 bool	ScalarConverter::_isDouble(void)
 {
+	if (!_dots)
+		return false;
 
+	std::string::const_iterator it = _str.begin();
+
+	if (*it == '+' || *it == '-')
+		it++;
+	while (it != _str.end())
+	{
+		if (!std::isdigit(*it) && *it != '.')
+			throw std::invalid_argument("Invalid Double: bad char");
+		++it;
+	}
+	return true;
 }
 
+bool	ScalarConverter::_isInfi(void)
+{
+	if (_dots)
+		return false;
+	if (_str == "-inff" || _str == "+inff" || _str == "nanf")
+		return true;
+	if (_str == "-inf" || _str == "+inf" || _str == "nan")
+		return true;
+	return false;
+}
 
 /*
 ** --------------------------------- ACCESSOR ---------------------------------
