@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:15 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 10:49:48 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 12:26:26 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,15 @@ static int	countDots(std::string str)
 ScalarConverter::ScalarConverter(const char *arg)
 	:	_str(arg),
 		_dots(countDots(_str)),
-		_type(ERROR)
+		_type(ERROR),
+		_int_overflow(false),
+		_float_overflow(false)
 {
 	try
 	{
 		_validateInput();
 		_initType();
+		_setLimits();
 		_convert();
 		_printValues();
 	}
@@ -51,12 +54,20 @@ ScalarConverter::ScalarConverter(const char *arg)
 }
 
 ScalarConverter::ScalarConverter()
-	: _str(""), _dots(0), _type(ERROR)
+	:	_str(""),
+		_dots(0),
+		_type(ERROR),
+		_int_overflow(false),
+		_float_overflow(false)
 {
 }
 
 ScalarConverter::ScalarConverter( const ScalarConverter & src )
-	: _str(""), _dots(0), _type(ERROR)
+	:	_str(""),
+		_dots(0),
+		_type(ERROR),
+		_int_overflow(false),
+		_float_overflow(false)
 {
 	(void)src;
 }
@@ -110,6 +121,16 @@ void	ScalarConverter::_initType(void)
 		throw std::invalid_argument("Invalid argument");
 }
 
+void		ScalarConverter::_setLimits(void)
+{
+	double value = strtod(_str.c_str(), NULL);
+
+	if (value < INT_MIN || value > INT_MAX)
+		_int_overflow = true;
+	if (value < -FLT_MAX || value > FLT_MAX)
+		_float_overflow = true;
+} 
+
 /*
 ** ------------------------------ PRINT METHODS --------------------------------
 */
@@ -143,13 +164,22 @@ void	ScalarConverter::_printInt(void) const
 		std::cout << "\tint: impossible" << std::endl;
 		return ;
 	}
+	if (_int_overflow)
+	{
+		std::cout << "\tint: overflow" << std::endl;
+		return ;
+	}
 	std::cout << "\tint: " << _int << std::endl;
 }
 
 void	ScalarConverter::_printFloat(void) const
 {
+	if (_float_overflow && _type != PSEUDO_LITERALS)
+	{
+		std::cout << "\tfloat: overflow" << std::endl;
+		return ;
+	}
 	std::cout << "\tfloat: " << _float << std::endl;
-
 }
 
 void	ScalarConverter::_printDouble(void) const
@@ -195,6 +225,10 @@ void	ScalarConverter::_convertChar(void)
 
 void	ScalarConverter::_convertInt(void)
 {
+	if (_int_overflow)
+	{
+		throw std::overflow_error("Input is invalid integer: Overflow error");
+	}
 	_int = std::atoi(_str.c_str());
 	_char = static_cast<char>(_int);
 	_float = static_cast<float>(_int);
@@ -205,6 +239,10 @@ void	ScalarConverter::_convertFloat(void)
 {
 	double	d = std::atof(_str.c_str());
 
+	if (_float_overflow)
+	{
+		throw std::overflow_error("Input is invalid float: Overflow error");
+	}
 	_float = static_cast<float>(d);
 	_char = static_cast<char>(_float);
 	_int = static_cast<int>(_float);
@@ -223,8 +261,8 @@ void	ScalarConverter::_convertPseudoLiterals(void)
 {
 	_char = 0;
 	_int = 0;
-	_double = std::strtod(_str.c_str(), NULL);
-	_float = static_cast<float>(_double);
+	_float = _getFloatPseudoLiterals();
+	_double = _getDoublePseudoLiterals();
 }
 
 /*
@@ -324,18 +362,18 @@ bool	ScalarConverter::_isInfi(void)
 float	ScalarConverter::_getFloatPseudoLiterals(void) const
 {
 	if (_str == "+inff" || _str == "+inf")
-		return std::numeric_limits<float>::max() + 1;
+		return std::numeric_limits<float>::infinity();
 	else if (_str == "-inff" || _str == "-inf")
-		return std::numeric_limits<float>::min() - 1;
+		return -std::numeric_limits<float>::infinity();
 	return std::numeric_limits<float>::quiet_NaN();
 }
 
 double	ScalarConverter::_getDoublePseudoLiterals(void) const
 {
 	if (_str == "+inff" || _str == "+inf")
-		return std::numeric_limits<double>::max();
+		return std::numeric_limits<double>::infinity();
 	else if (_str == "-inff" || _str == "-inf")
-		return -std::numeric_limits<double>::min();
+		return -std::numeric_limits<double>::infinity();
 	return std::numeric_limits<double>::quiet_NaN();
 }
 
