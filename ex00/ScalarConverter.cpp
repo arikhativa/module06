@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:15 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 12:26:26 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 12:31:21 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ void		ScalarConverter::_setLimits(void)
 
 void	ScalarConverter::_printValues(void) const
 {
-	std::cout << "input: '" << _str << "'" << std::endl;
 	_printChar();
 	_printInt();
 	_printFloat();
@@ -148,43 +147,43 @@ void	ScalarConverter::_printChar(void) const
 {
 	if (_type == PSEUDO_LITERALS)
 	{
-		std::cout << "\tchar: impossible" << std::endl;
+		std::cout << "char: impossible" << std::endl;
 		return ;
 	}
 	if (!std::isprint(_char))
-		std::cout << "\tchar: unprintable" << std::endl;
+		std::cout << "char: Non displayable" << std::endl;
 	else
-		std::cout << "\tchar: " << _char << std::endl;
+		std::cout << "char: '" << _char << "'" << std::endl;
 }
 
 void	ScalarConverter::_printInt(void) const
 {
 	if (_type == PSEUDO_LITERALS)
 	{
-		std::cout << "\tint: impossible" << std::endl;
+		std::cout << "int: impossible" << std::endl;
 		return ;
 	}
 	if (_int_overflow)
 	{
-		std::cout << "\tint: overflow" << std::endl;
+		std::cout << "int: overflow" << std::endl;
 		return ;
 	}
-	std::cout << "\tint: " << _int << std::endl;
+	std::cout << "int: " << _int << std::endl;
 }
 
 void	ScalarConverter::_printFloat(void) const
 {
 	if (_float_overflow && _type != PSEUDO_LITERALS)
 	{
-		std::cout << "\tfloat: overflow" << std::endl;
+		std::cout << "float: overflow" << std::endl;
 		return ;
 	}
-	std::cout << "\tfloat: " << _float << std::endl;
+	std::cout << "float: " << _float << "f" <<  std::endl;
 }
 
 void	ScalarConverter::_printDouble(void) const
 {
-	std::cout << "\tdouble: " << _double << std::endl;
+	std::cout << "double: " << _double << std::endl;
 }
 
 /*
