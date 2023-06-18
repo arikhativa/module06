@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:15 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 13:05:12 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 15:46:51 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ ScalarConverter::ScalarConverter(const char *arg)
 		_type(ERROR),
 		_int_overflow(false),
 		_float_overflow(false),
-		_double_overflow(false)
+		_double_overflow(false),
+		_no_decimal(false)
 {
 	try
 	{
@@ -99,7 +100,7 @@ ScalarConverter &				ScalarConverter::operator=( ScalarConverter const & rhs )
 ** --------------------------------- METHODS ----------------------------------
 */
 
-void	ScalarConverter::_validateInput(void)
+void	ScalarConverter::_validateInput(void) const
 {
 	if (_str.empty())
 		throw std::invalid_argument("Empty argument");
@@ -121,9 +122,8 @@ void	ScalarConverter::_initType(void)
 	else if (_isDouble())
 		_type = DOUBLE;
 	if (_type == ERROR)
-		throw std::invalid_argument("Invalid argument");
+		throw std::invalid_argument("Invalid argument: failed to detect type");
 }
-
 
 void		ScalarConverter::_setLimits(void)
 {
@@ -134,10 +134,11 @@ void		ScalarConverter::_setLimits(void)
 		_int_overflow = true;
 		_float_overflow = true;
 		_double_overflow = true;
+		return ;
 	}
-	if (value < INT_MIN || value > INT_MAX)
+	if (value < static_cast<double>(INT_MIN) || value > static_cast<double>(INT_MAX))
 		_int_overflow = true;
-	if (value < -FLT_MAX || value > FLT_MAX)
+	if (value < static_cast<double>(-FLT_MAX) || value > static_cast<double>(FLT_MAX))
 		_float_overflow = true;
 } 
 
@@ -188,12 +189,22 @@ void	ScalarConverter::_printFloat(void) const
 		std::cout << "float: overflow" << std::endl;
 		return ;
 	}
-	std::cout << "float: " << std::setprecision(1) << std::fixed << _float << "f" <<  std::endl;
+	if (_no_decimal)
+	{
+		std::cout << "float: " << _float << ".0f" <<  std::endl;
+	}
+	else
+		std::cout << "float: " << _float << "f" <<  std::endl;
 }
 
 void	ScalarConverter::_printDouble(void) const
 {
-	std::cout << "double: " << std::setprecision(1) << std::fixed << _double << std::endl;
+	if (_no_decimal)
+	{
+		std::cout << "double: " << _double << ".0" <<  std::endl;
+	}
+	else
+		std::cout << "double: " << _double << std::endl;
 }
 
 /*
@@ -230,6 +241,7 @@ void	ScalarConverter::_convertChar(void)
 	_int = static_cast<int>(_char);
 	_float = static_cast<float>(_char);
 	_double = static_cast<double>(_char);
+	_no_decimal = true;
 }
 
 void	ScalarConverter::_convertInt(void)
@@ -242,6 +254,23 @@ void	ScalarConverter::_convertInt(void)
 	_char = static_cast<char>(_int);
 	_float = static_cast<float>(_int);
 	_double = static_cast<double>(_int);
+	_no_decimal = true;
+}
+
+bool	ScalarConverter::_isWholeNumber(void) const
+{
+	std::size_t i = _str.find('.');
+
+	if (i == std::string::npos)
+		return true;
+	++i;
+	while (_str[i])
+	{
+		if (_str[i] != '0' && _str[i] != 'f')
+			return false;
+		++i;
+	}
+	return true;
 }
 
 void	ScalarConverter::_convertFloat(void)
@@ -256,6 +285,8 @@ void	ScalarConverter::_convertFloat(void)
 	_char = static_cast<char>(_float);
 	_int = static_cast<int>(_float);
 	_double = static_cast<double>(_float);
+	if (_isWholeNumber())
+		_no_decimal = true;
 }
 
 void	ScalarConverter::_convertDouble(void)
@@ -268,6 +299,8 @@ void	ScalarConverter::_convertDouble(void)
 	_char = static_cast<char>(_double);
 	_int = static_cast<int>(_double);
 	_float = static_cast<float>(_double);
+	if (_isWholeNumber())
+		_no_decimal = true;
 }
 
 void	ScalarConverter::_convertPseudoLiterals(void)

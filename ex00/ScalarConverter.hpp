@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:13 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 13:05:04 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 15:36:09 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include <climits>
 # include <cfloat>
 # include <cerrno>
-# include <iomanip>
 
 typedef enum	e_type
 {
@@ -57,8 +56,9 @@ class ScalarConverter
 		bool				_int_overflow;
 		bool				_float_overflow;
 		bool				_double_overflow;
+		bool				_no_decimal;
 
-		void	_validateInput(void);
+		void	_validateInput(void) const;
 		void	_initType(void);
 		void	_setLimits(void);
 
@@ -76,6 +76,7 @@ class ScalarConverter
 		bool	_isInt(void);
 		bool	_isFloat(void);
 		bool	_isDouble(void);
+		bool	_isWholeNumber(void) const;
 
 	// util
 		float	_getFloatPseudoLiterals(void) const;
