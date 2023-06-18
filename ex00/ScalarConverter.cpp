@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:15 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 12:31:21 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 13:05:12 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ ScalarConverter::ScalarConverter(const char *arg)
 		_dots(countDots(_str)),
 		_type(ERROR),
 		_int_overflow(false),
-		_float_overflow(false)
+		_float_overflow(false),
+		_double_overflow(false)
 {
 	try
 	{
@@ -58,7 +59,8 @@ ScalarConverter::ScalarConverter()
 		_dots(0),
 		_type(ERROR),
 		_int_overflow(false),
-		_float_overflow(false)
+		_float_overflow(false),
+		_double_overflow(false)
 {
 }
 
@@ -67,7 +69,8 @@ ScalarConverter::ScalarConverter( const ScalarConverter & src )
 		_dots(0),
 		_type(ERROR),
 		_int_overflow(false),
-		_float_overflow(false)
+		_float_overflow(false),
+		_double_overflow(false)
 {
 	(void)src;
 }
@@ -121,10 +124,17 @@ void	ScalarConverter::_initType(void)
 		throw std::invalid_argument("Invalid argument");
 }
 
+
 void		ScalarConverter::_setLimits(void)
 {
 	double value = strtod(_str.c_str(), NULL);
 
+	if (errno == ERANGE)
+	{
+		_int_overflow = true;
+		_float_overflow = true;
+		_double_overflow = true;
+	}
 	if (value < INT_MIN || value > INT_MAX)
 		_int_overflow = true;
 	if (value < -FLT_MAX || value > FLT_MAX)
@@ -178,12 +188,12 @@ void	ScalarConverter::_printFloat(void) const
 		std::cout << "float: overflow" << std::endl;
 		return ;
 	}
-	std::cout << "float: " << _float << "f" <<  std::endl;
+	std::cout << "float: " << std::setprecision(1) << std::fixed << _float << "f" <<  std::endl;
 }
 
 void	ScalarConverter::_printDouble(void) const
 {
-	std::cout << "double: " << _double << std::endl;
+	std::cout << "double: " << std::setprecision(1) << std::fixed << _double << std::endl;
 }
 
 /*
@@ -250,6 +260,10 @@ void	ScalarConverter::_convertFloat(void)
 
 void	ScalarConverter::_convertDouble(void)
 {
+	if (_double_overflow)
+	{
+		throw std::overflow_error("Input is invalid double: Overflow error");
+	}
 	_double = std::strtod(_str.c_str(), NULL);
 	_char = static_cast<char>(_double);
 	_int = static_cast<int>(_double);

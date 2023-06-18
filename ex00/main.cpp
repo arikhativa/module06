@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 10:45:46 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 12:17:19 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 13:02:44 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,5 @@ int main(int ac, char **av)
 		return 0;
 	}
 	ScalarConverter s(av[1]);
-	// std::cout << f << std::endl;
 	return 0;
 }
