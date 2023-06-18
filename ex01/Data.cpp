@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 16:08:36 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 16:10:23 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 16:27:52 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,16 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-Data::Data()
-	: _i(55)
+Data::Data(int i, char c, float f)
+	: _i(i),
+	_char(c),
+	_float(f)
 {
 }
 
 Data::Data( const Data & src )
-	: _i(src.getValue())
 {
+	(void)src;
 }
 
 
@@ -42,32 +44,33 @@ Data::~Data()
 
 Data &				Data::operator=( Data const & rhs )
 {
-	if ( this != &rhs )
-	{
-		this->_i = rhs.getValue();
-	}
+	(void)rhs;
 	return *this;
 }
 
 std::ostream &			operator<<( std::ostream & o, Data const & i )
 {
-	o << "Data[" << i.getValue() << "]";
+	o << "Data[" << i.getInt() << ", '" << i.getChar() << "', " << i.getFloat() << "]";
 	return o;
 }
-
-
-/*
-** --------------------------------- METHODS ----------------------------------
-*/
-
 
 /*
 ** --------------------------------- ACCESSOR ---------------------------------
 */
 
-int	Data::getValue(void) const
+int	Data::getInt(void) const
 {
 	return _i;
+}
+
+char	Data::getChar(void) const
+{
+	return _char;
+}
+
+float	Data::getFloat(void) const
+{
+	return _float;
 }
 
 /* ************************************************************************** */

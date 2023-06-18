@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 16:13:28 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 16:14:22 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 16:21:38 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,15 @@ Serializer &				Serializer::operator=( Serializer const & rhs )
 ** --------------------------------- METHODS ----------------------------------
 */
 
-uintptr_t	serialize(Data* ptr)
+uintptr_t	Serializer::serialize(Data* ptr)
 {
-
+	return reinterpret_cast<uintptr_t>(ptr);
 }
 
-Data	*deserialize(uintptr_t raw)
+Data	*Serializer::deserialize(uintptr_t raw)
 {
-
+	return reinterpret_cast<Data*>(raw);
 }
-
-
-/*
-** --------------------------------- ACCESSOR ---------------------------------
-*/
 
 
 /* ************************************************************************** */

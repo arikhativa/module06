@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 16:07:45 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 16:09:42 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/06/18 16:28:06 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,20 @@
 class Data
 {
 	public:
-		Data();
+		Data(int i, char c, float f);
 		Data( Data const & src );
 		~Data();
 
 		Data &		operator=( Data const & rhs );
-
-		int	getValue(void) const;
+		
+		int	getInt(void) const;
+		char	getChar(void) const;
+		float	getFloat(void) const;
 
 	private:
 		int	_i;
+		char	_char;
+		float	_float;
 
 };
 
