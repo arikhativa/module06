@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 10:45:46 by yrabby            #+#    #+#             */
-/*   Updated: 2023/10/02 12:43:20 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/10/02 14:42:40 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ int main()
 
     std::cout << "original:\t" << d1 << std::endl;
     std::cout << "ptr:\t\t" << ptr << std::endl;
+
+    std::cout << "original:\t" << *d1 << std::endl;
+    std::cout << "ptr:\t\t" << *ptr << std::endl;
 
     delete d1;
 
