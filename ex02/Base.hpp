@@ -6,20 +6,19 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 16:38:28 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 16:38:41 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/10/02 12:43:31 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BASE_HPP
-# define BASE_HPP
+#define BASE_HPP
 
 class Base
 {
-	public:
-		virtual ~Base();
+  public:
+    virtual ~Base();
 
-	private:
-
+  private:
 };
 
 #endif /* ************************************************************ BASE_H */

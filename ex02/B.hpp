@@ -6,24 +6,24 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 16:44:19 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 16:44:31 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/10/02 12:43:30 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef B_HPP
-# define B_HPP
+#define B_HPP
 
-# include <iostream>
-# include <string>
+#include <iostream>
+#include <string>
 
-# include "Base.hpp"
+#include "Base.hpp"
 
 class B : public Base
 {
-	public:
-		B();
-		virtual ~B();
-
+  public:
+    B();
+    virtual ~B();
 };
 
-#endif /* *************************************************************** B_H */
+#endif /* *************************************************************** B_H                                          \
+        */

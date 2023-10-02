@@ -6,24 +6,23 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 16:44:17 by yrabby            #+#    #+#             */
-/*   Updated: 2023/06/18 16:44:47 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/10/02 12:43:33 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef C_HPP
-# define C_HPP
+#define C_HPP
 
-# include <iostream>
-# include <string>
+#include <iostream>
+#include <string>
 
-# include "Base.hpp"
+#include "Base.hpp"
 
 class C : public Base
 {
-	public:
-		C();
-		virtual ~C();
-
+  public:
+    C();
+    virtual ~C();
 };
 
 #endif /* *************************************************************** C_H */
