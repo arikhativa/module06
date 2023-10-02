@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:15 by yrabby            #+#    #+#             */
-/*   Updated: 2023/10/02 12:43:12 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/10/02 14:33:18 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 std::string ScalarConverter::_str = "";
 int ScalarConverter::_dots = 0;
-t_type ScalarConverter::_type = ERROR;
+ScalarConverter::type ScalarConverter::_type = ERROR;
 
 char ScalarConverter::_char = 0;
 int ScalarConverter::_int = 0;
@@ -123,7 +123,7 @@ void ScalarConverter::_initType(void)
 
 void ScalarConverter::_setLimits(void)
 {
-    double value = strtod(_str.c_str(), NULL);
+    double value = ::strtod(_str.c_str(), NULL);
 
     if (errno == ERANGE)
     {
@@ -246,7 +246,7 @@ void ScalarConverter::_convertInt(void)
     {
         throw std::overflow_error("Input is invalid integer: Overflow error");
     }
-    _int = std::atoi(_str.c_str());
+    _int = ::atoi(_str.c_str());
     _char = static_cast<char>(_int);
     _float = static_cast<float>(_int);
     _double = static_cast<double>(_int);
@@ -271,7 +271,7 @@ bool ScalarConverter::_isWholeNumber(void)
 
 void ScalarConverter::_convertFloat(void)
 {
-    double d = std::atof(_str.c_str());
+    double d = ::atof(_str.c_str());
 
     if (_float_overflow)
     {
@@ -291,7 +291,7 @@ void ScalarConverter::_convertDouble(void)
     {
         throw std::overflow_error("Input is invalid double: Overflow error");
     }
-    _double = std::strtod(_str.c_str(), NULL);
+    _double = ::strtod(_str.c_str(), NULL);
     _char = static_cast<char>(_double);
     _int = static_cast<int>(_double);
     _float = static_cast<float>(_double);

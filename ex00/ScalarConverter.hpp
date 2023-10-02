@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:56:13 by yrabby            #+#    #+#             */
-/*   Updated: 2023/10/02 12:43:14 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/10/02 14:26:12 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,22 @@
 #include <sstream>
 #include <string>
 
-typedef enum e_type
-{
-    ERROR = -1,
-    CHAR,
-    INT,
-    FLOAT,
-    DOUBLE,
-    PSEUDO_LITERALS
-} t_type;
-
 class ScalarConverter
 {
   public:
     static void convert(const char *arg);
 
   private:
+    enum type
+    {
+        ERROR = -1,
+        CHAR,
+        INT,
+        FLOAT,
+        DOUBLE,
+        PSEUDO_LITERALS
+    };
+
     ~ScalarConverter();
     ScalarConverter();
     ScalarConverter(ScalarConverter const &src);
@@ -45,7 +45,7 @@ class ScalarConverter
 
     static std::string _str;
     static int _dots;
-    static t_type _type;
+    static type _type;
 
     static char _char;
     static int _int;
