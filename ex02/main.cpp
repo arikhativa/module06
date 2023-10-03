@@ -6,7 +6,7 @@
 /*   By: yrabby <yrabby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 10:45:46 by yrabby            #+#    #+#             */
-/*   Updated: 2023/10/02 12:43:35 by yrabby           ###   ########.fr       */
+/*   Updated: 2023/10/03 14:45:18 by yrabby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ void identify(Base &p)
 {
     try
     {
-        dynamic_cast<A &>(p);
+        A &tmp = dynamic_cast<A &>(p);
+        (void)tmp;
         std::cout << "A" << std::endl;
         return;
     }
@@ -64,7 +65,8 @@ void identify(Base &p)
     }
     try
     {
-        dynamic_cast<B &>(p);
+        B &tmp = dynamic_cast<B &>(p);
+        (void)tmp;
         std::cout << "B" << std::endl;
         return;
     }
